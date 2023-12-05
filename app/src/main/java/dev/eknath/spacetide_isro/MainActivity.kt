@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val viewModel = hiltViewModel<SpaceCraftsViewModel>()
-                    val content = viewModel.git .collectAsState(initial = null)
+                    val content = viewModel.spaceCraft.collectAsState(initial = null)
 
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
 
