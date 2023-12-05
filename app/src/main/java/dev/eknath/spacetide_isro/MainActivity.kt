@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dev.eknath.spacetide_isro.presentation.SpaceCraftsViewModel
+import dev.eknath.spacetide_isro.presentation.screens.SpaceCraftListScreen
 import dev.eknath.spacetide_isro.presentation.util.URLHandler
 import dev.eknath.spacetide_isro.ui.theme.SpaceTide_ISROTheme
 
@@ -37,48 +38,12 @@ class MainActivity : ComponentActivity() {
             SpaceTide_ISROTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-
                     val viewModel = hiltViewModel<SpaceCraftsViewModel>()
                     val content = viewModel.spaceCraft.collectAsState(initial = null)
-                    val context = LocalContext.current
 
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-
-
-                        if (content.value == null) {
-                            item {
-                                CircularProgressIndicator()
-                            }
-                        } else {
-                            items(items = content.value.orEmpty()) {
-                                Card(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(20.dp)
-                                        .heightIn(min = 80.dp)
-                                        .clickable { viewModel.selectSpaceCraft(it) },
-                                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                                ) {
-                                    Column(modifier = Modifier.padding(5.dp)) {
-                                        Text(
-                                            text = it.name,
-                                            style = MaterialTheme.typography.displaySmall
-                                        )
-                                        Text(text = "Launch: ${it.launchDate}")
-                                        Text(text = "application: ${it.application}")
-//                                        Text(text = "orbitType:${it.orbitType}")
-//                                        Text(text = "vechile: ${it.launchVehicle}")
-                                        Text(text = "status :${it.missionStatus}")
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-
+                    SpaceCraftListScreen(content = content, onView = viewModel::selectSpaceCraft)
                 }
             }
         }
