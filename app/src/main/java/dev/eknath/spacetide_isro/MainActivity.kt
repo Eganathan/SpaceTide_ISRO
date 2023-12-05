@@ -4,14 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dev.eknath.spacetide_isro.presentation.SpaceCraftsViewModel
 import dev.eknath.spacetide_isro.ui.theme.SpaceTide_ISROTheme
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,25 +30,26 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+
+                    val viewModel = hiltViewModel<SpaceCraftsViewModel>()
+                    val content = viewModel.git .collectAsState(initial = null)
+
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+
+                        if (content.value == null) {
+                            item {
+                                CircularProgressIndicator()
+                            }
+                        } else {
+                            items(items = content.value.orEmpty()) {
+                                Text(text = "${it.name}")
+                            }
+                        }
+                    }
+
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SpaceTide_ISROTheme {
-        Greeting("Android")
     }
 }
