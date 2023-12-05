@@ -1,6 +1,8 @@
 package dev.eknath.spacetide_isro.presentation
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +21,17 @@ class SpaceCraftsViewModel @Inject constructor(private val repository: Spacecraf
     private val _spaceCraft: MutableStateFlow<List<SpacecraftEntity>?> = MutableStateFlow(null)
     val spaceCraft: StateFlow<List<SpacecraftEntity>?> = _spaceCraft
 
+    private val _selectedSpaceCraft: MutableState<SpacecraftEntity?> = mutableStateOf(null)
+    val selectedSpaceCraft: State<SpacecraftEntity?> = _selectedSpaceCraft
+
     fun fetchSpaceCraft() {
         viewModelScope.launch {
             _spaceCraft.emit(repository.getSpaceCraftList().body())
         }
+    }
+
+    fun selectSpaceCraft(spacecraftEntity: SpacecraftEntity) {
+        _selectedSpaceCraft.value = spacecraftEntity
     }
 
     init {

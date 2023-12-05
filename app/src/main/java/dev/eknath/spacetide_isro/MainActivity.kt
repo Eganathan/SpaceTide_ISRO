@@ -3,6 +3,7 @@ package dev.eknath.spacetide_isro
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +20,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dev.eknath.spacetide_isro.presentation.SpaceCraftsViewModel
+import dev.eknath.spacetide_isro.presentation.util.URLHandler
 import dev.eknath.spacetide_isro.ui.theme.SpaceTide_ISROTheme
 
 @AndroidEntryPoint
@@ -40,6 +43,7 @@ class MainActivity : ComponentActivity() {
 
                     val viewModel = hiltViewModel<SpaceCraftsViewModel>()
                     val content = viewModel.spaceCraft.collectAsState(initial = null)
+                    val context = LocalContext.current
 
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
 
@@ -54,15 +58,19 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(20.dp)
-                                        .heightIn(min = 80.dp),
+                                        .heightIn(min = 80.dp)
+                                        .clickable { viewModel.selectSpaceCraft(it) },
                                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                                 ) {
                                     Column(modifier = Modifier.padding(5.dp)) {
-                                        Text(text = it.name, style = MaterialTheme.typography.displaySmall)
-                                        Text(text = "orbitType:${it.orbitType}")
-                                        Text(text = "Date: ${it.launchDate}")
+                                        Text(
+                                            text = it.name,
+                                            style = MaterialTheme.typography.displaySmall
+                                        )
+                                        Text(text = "Launch: ${it.launchDate}")
                                         Text(text = "application: ${it.application}")
-                                        Text(text = "vechile: ${it.launchVehicle}")
+//                                        Text(text = "orbitType:${it.orbitType}")
+//                                        Text(text = "vechile: ${it.launchVehicle}")
                                         Text(text = "status :${it.missionStatus}")
                                     }
 
