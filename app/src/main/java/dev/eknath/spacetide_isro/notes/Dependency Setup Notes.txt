@@ -1,0 +1,8 @@
+
+1. dependecy Injection
+ a -add the dependency in module level gradle
+ b -add class path in project level gradle
+ c - add and apply the plugin
+ d - create a application that extends application, annotate it with @HiltAndroidApp and it to names properies in manifest application tag
+ e - annotate the main activity as @AndroidEntryPoint
+
