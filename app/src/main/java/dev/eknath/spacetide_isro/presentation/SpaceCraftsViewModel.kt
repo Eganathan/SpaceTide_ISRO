@@ -24,7 +24,7 @@ class SpaceCraftsViewModel @Inject constructor(private val repository: Spacecraf
     private val _selectedSpaceCraft: MutableState<SpacecraftEntity?> = mutableStateOf(null)
     val selectedSpaceCraft: State<SpacecraftEntity?> = _selectedSpaceCraft
 
-    fun fetchSpaceCraft() {
+    private fun fetchSpaceCraft() {
         viewModelScope.launch {
             _spaceCraft.emit(repository.getSpaceCraftList().body())
         }
