@@ -29,19 +29,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import dev.eknath.spacetide_isro.data.sources.remote.model.SpacecraftEntity
+import dev.eknath.spacetide_isro.presentation.SpaceCraftsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpaceCraftListScreen(
-    content: State<List<SpacecraftEntity>?>,
-    onView: (SpacecraftEntity) -> Unit
+    viewModel: SpaceCraftsViewModel, navigator: NavController
 ) {
+    val content = viewModel.spaceCraft.collectAsState(null)
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -75,7 +78,10 @@ fun SpaceCraftListScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp, vertical = 5.dp)
                             .heightIn(min = 80.dp)
-                            .clickable { onView(it) },
+                            .clickable {
+                                viewModel::selectSpaceCraft.invoke(it)
+                                navigator.navigate("detail")
+                            },
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                     ) {
                         Column(modifier = Modifier.padding(5.dp)) {

@@ -99,4 +99,7 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.7.5")
 }

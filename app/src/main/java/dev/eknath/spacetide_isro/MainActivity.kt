@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dev.eknath.spacetide_isro.presentation.SpaceCraftsViewModel
+import dev.eknath.spacetide_isro.presentation.navigation.AppNavigator
 import dev.eknath.spacetide_isro.presentation.screens.SpaceCraftListScreen
 import dev.eknath.spacetide_isro.presentation.util.URLHandler
 import dev.eknath.spacetide_isro.ui.theme.SpaceTide_ISROTheme
@@ -36,15 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SpaceTide_ISROTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-                ) {
-                    val viewModel = hiltViewModel<SpaceCraftsViewModel>()
-                    val content = viewModel.spaceCraft.collectAsState(initial = null)
-
-                    SpaceCraftListScreen(content = content, onView = viewModel::selectSpaceCraft)
-                }
+                AppNavigator()
             }
         }
     }
