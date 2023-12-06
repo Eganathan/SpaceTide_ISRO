@@ -24,11 +24,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,44 +68,53 @@ fun SpaceCraftListScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
+                    .padding(top = 15.dp)
             ) {
-                item { Spacer(modifier = Modifier.height(25.dp)) }
+                item { Spacer(modifier = Modifier.height(15.dp)) }
                 items(items = content.value.orEmpty(), key = { it.id }) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 5.dp)
-                            .heightIn(min = 80.dp)
-                            .clickable {
-                                viewModel::selectSpaceCraft.invoke(it)
-                                navigator.navigate("detail")
-                            },
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                    ) {
-                        Column(modifier = Modifier.padding(5.dp)) {
-                            Text(
-                                text = it.name,
-                                style = MaterialTheme.typography.displaySmall,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
-                            Row(modifier = Modifier.padding(top = 10.dp)) {
-                                Icon(
-                                    imageVector = Icons.Default.DateRange,
-                                    tint = Color.Unspecified,
-                                    contentDescription = ""
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(text = "Launch Date: ${it.launchDate}")
-                            }
-                            Text(text = "Purpose:  ${it.application}")
-                            Text(text = "Status :${it.missionStatus}")
-                        }
-
-                    }
+                    ListCardItem(entity = it, onClick = {
+                        viewModel::selectSpaceCraft.invoke(it)
+                        navigator.navigate("detail")
+                    })
                 }
                 item { Spacer(modifier = Modifier.height(150.dp)) }
             }
         }
+    }
+}
+
+@Composable
+private fun ListCardItem(
+    entity: SpacecraftEntity,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 5.dp)
+            .heightIn(min = 80.dp)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Column(modifier = Modifier.padding(5.dp)) {
+            Text(
+                text = entity.name,
+                style = MaterialTheme.typography.displaySmall,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Row(modifier = Modifier.padding(top = 10.dp)) {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    tint = Color.Unspecified,
+                    contentDescription = ""
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(text = "Launch Date: ${entity.launchDate}")
+            }
+            Text(text = "Purpose:  ${entity.application}")
+            Text(text = "Status :${entity.missionStatus}")
+        }
+
     }
 }
